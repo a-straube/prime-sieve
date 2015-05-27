@@ -33,7 +33,10 @@ var primesBefore = function(n) {
 $(document).ready(function() {
   $("form#numbercounter").submit(function(event) {
     var number = parseInt($("input#number").val());
+    start = performance.now()
     var primes = primesBefore(number);
+    end = performance.now()
+    console.log(end - start)
     var numberList = numbersBefore(number).map (function(x) {
       if (primes.indexOf(x) >= 0) {
         return "<span class='prime " + x.toString() + "'>" + x.toString() + "</span>";
@@ -54,13 +57,9 @@ $(document).ready(function() {
 
     var primeIndex = 0;
     var id = setInterval(function() {
-      if (primeIndex >= primes.length) {
-        clearInterval(id);
-      }
+      if (primeIndex >= primes.length) { clearInterval(id); }
       $("span." + primes[primeIndex]).addClass("hovered-prime");
-      if (primeIndex > 0) {
-        $("span." + primes[primeIndex - 1]).removeClass("hovered-prime");
-      }
+      $("span." + primes[primeIndex - 1]).removeClass("hovered-prime");
       primeIndex += 1;
     }, 500);
 
