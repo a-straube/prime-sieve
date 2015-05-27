@@ -33,9 +33,37 @@ var primesBefore = function(n) {
 $(document).ready(function() {
   $("form#numbercounter").submit(function(event) {
     var number = parseInt($("input#number").val());
+    var primes = primesBefore(number);
+    var numberList = numbersBefore(number).map (function(x) {
+      if (primes.indexOf(x) >= 0) {
+        return "<span class='prime " + x.toString() + "'>" + x.toString() + "</span>";
+      } else {
+        return x.toString();
+      }
+    });
 
-    var numberList = numbersBefore(number).map (function(x) {return x.toString();})
-    $("#result").text('Hover over a number to see if it is prime: ' + numberList.join(', '));
+    $("#result").html('Hover over a number to see if it is prime: ' + numberList.join(', '));
+
+    $("span.prime").mouseover(function() {
+      $(this).addClass("hovered-prime");
+    });
+
+    $("span.prime").mouseout(function() {
+      $(this).removeClass("hovered-prime");
+    });
+
+    var primeIndex = 0;
+    var id = setInterval(function() {
+      if (primeIndex >= primes.length) {
+        clearInterval(id);
+      }
+      $("span." + primes[primeIndex]).addClass("hovered-prime");
+      if (primeIndex > 0) {
+        $("span." + primes[primeIndex - 1]).removeClass("hovered-prime");
+      }
+      primeIndex += 1;
+    }, 500);
+
     event.preventDefault();
   });
 });
